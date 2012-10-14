@@ -1,5 +1,8 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 /**
  *  Class #6 Homework
@@ -7,22 +10,56 @@ import java.util.GregorianCalendar;
  */
 public class Assignment {
 
+	 private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+	 private static SimpleDateFormat fullFormatter = new SimpleDateFormat("yyyy/MM/dd HH:MM");
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
 		Assignment a = new Assignment();
-
-		Task task = null;
-		task = a.new Task();
-		System.out.println(task);
-
-		//task = a.new Task("Test", "First note ever made, yahoo!", GregorianCalendar.getInstance().getTime());
-		//System.out.println(task);
-
+		
+		Note note = a.new Note();
+		Assignment.printTask(note);
+		
+		note = a.new Note("Test Note", "This is a test");
+		Assignment.printTask(note);
+		
+		Task task = a.new Task();
+		Assignment.printTask(task);
+		
+		String date = 2012 + "/" + 11 + "/" + 25;
+	    try {
+			task = a.new Task("Test Task", "This is a task", formatter.parse(date));
+			Assignment.printTask(task);
+		} catch (ParseException e) {
+			System.out.print("Unable to format the data: " + date);
+			e.printStackTrace();
+		}
+		
+		
+	    date = 2012 + "/" + 11 + "/" + 28 + " 07:30";
+		InterviewTask interviewTask = a.new InterviewTask();
+		Assignment.printTask(interviewTask);
+	    try {
+	    	interviewTask = a.new InterviewTask("Test Task", "This is a task", fullFormatter.parse(date),
+	    			true, "914-914-0914",
+					"Frank Silvadore"
+	    			);
+			Assignment.printTask(interviewTask);
+		} catch (ParseException e) {
+			System.out.print("Unable to format the data: " + date);
+			e.printStackTrace();
+		}
+		
 	}
-
+	
+	private static void printTask(ANote note){
+		if(note != null){
+			System.out.println(note);
+		}
+	}
+	
 	static String getElement(String [] values, int index){
 
 		// validation
@@ -49,7 +86,7 @@ public class Assignment {
 		private String note = null;
 		private Date lastModifiedDate = null;
 		private Date createDate = null;
-		private String guid = null;
+		private UUID guid = null;
 		private boolean dirty = true;
 		
 		@Override
@@ -66,12 +103,14 @@ public class Assignment {
 		public void setDirty(boolean dirty) {
 			this.dirty = dirty;
 		}
-		public String getGuid() {
+		public UUID getGuid() {
 			return guid;
 		}
-		public void setGuid(String guid) {
+		
+		public void setGuid(UUID guid) {
 			this.guid = guid;
 		}
+
 		public String getName() {
 			return name;
 		}
@@ -102,11 +141,11 @@ public class Assignment {
 	
 	public class Note extends ANote {
 		
-		public Note(String name, String note, String guid) {
+		public Note(String name, String note) {
 			super();
 			setName(name);
 			setNote(note);
-			setGuid(guid);
+			setGuid(UUID.randomUUID());
 			setLastModifiedDate(GregorianCalendar.getInstance().getTime());
 			setCreateDate(GregorianCalendar.getInstance().getTime());
 			setDirty(true);
@@ -116,6 +155,18 @@ public class Assignment {
 		public Note() {
 			super();
 		}
+
+		@Override
+		public String toString() {
+			return "Note [aNote()=" + super.toString() + ", isDirty()="
+					+ isDirty() + ", getGuid()=" + getGuid() + ", getName()="
+					+ getName() + ", getNote()=" + getNote()
+					+ ", getLastModifiedDate()=" + getLastModifiedDate()
+					+ ", getCreateDate()=" + getCreateDate() + ", getClass()="
+					+ getClass() + ", hashCode()=" + hashCode() + "]";
+		}
+		
+		
 		
 	}
 	public abstract class ATask extends Note{
@@ -153,7 +204,7 @@ public class Assignment {
 		@Override
 		public String toString() {
 			return "ATask [completed=" + completed + ", completedDate="
-					+ completedDate + ", dueDate=" + dueDate + ", toString()="
+					+ completedDate + ", dueDate=" + dueDate + ", Note()="
 					+ super.toString() + ", isDirty()=" + isDirty()
 					+ ", getGuid()=" + getGuid() + ", getName()=" + getName()
 					+ ", getNote()=" + getNote() + ", getLastModifiedDate()="
@@ -166,11 +217,11 @@ public class Assignment {
 	
 	public class Task extends ATask{
 		
-		public Task(String name, String note, String guid, Date dueDate) {
+		public Task(String name, String note, Date dueDate) {
 			super();
 			setName(name);
 			setNote(note);
-			setGuid(guid);
+			setGuid(UUID.randomUUID());
 			setLastModifiedDate(GregorianCalendar.getInstance().getTime());
 			setCreateDate(GregorianCalendar.getInstance().getTime());
 			setCompleted(false);
@@ -180,6 +231,18 @@ public class Assignment {
 
 		public Task() {
 			super();
+		}
+
+		@Override
+		public String toString() {
+			return "Task [getDueDate()=" + getDueDate() + ", isCompleted()="
+					+ isCompleted() + ", getCompletedDate()="
+					+ getCompletedDate() + ", aNote()=" + super.toString()
+					+ ", isDirty()=" + isDirty() + ", getGuid()=" + getGuid()
+					+ ", getName()=" + getName() + ", getNote()=" + getNote()
+					+ ", getLastModifiedDate()=" + getLastModifiedDate()
+					+ ", getCreateDate()=" + getCreateDate() + ", getClass()="
+					+ getClass() + ", hashCode()=" + hashCode() + "]";
 		}
 		
 		
@@ -195,29 +258,31 @@ public class Assignment {
 			super();
 		}
 
-		public InterviewTask(String name, String note, String guid,
+		public InterviewTask(String name, String note, 
 				Date dueDate, boolean phoneInterview, String contactNumber,
 				String interviewerName) {
-			super(name, note, guid, dueDate);
+			super(name, note, dueDate);
 			this.phoneInterview = phoneInterview;
 			this.contactNumber = contactNumber;
 			this.interviewerName = interviewerName;
 		}
 		
 		
+		
+
 		@Override
 		public String toString() {
 			return "InterviewTask [phoneInterview=" + phoneInterview
 					+ ", contactNumber=" + contactNumber + ", interviewerName="
-					+ interviewerName + ", getDueDate()=" + getDueDate()
-					+ ", isCompleted()=" + isCompleted()
-					+ ", getCompletedDate()=" + getCompletedDate()
-					+ ", toString()=" + super.toString() + ", isDirty()="
-					+ isDirty() + ", getGuid()=" + getGuid() + ", getName()="
-					+ getName() + ", getNote()=" + getNote()
-					+ ", getLastModifiedDate()=" + getLastModifiedDate()
-					+ ", getCreateDate()=" + getCreateDate() + ", getClass()="
-					+ getClass() + ", hashCode()=" + hashCode() + "]";
+					+ interviewerName + ", Task=" + super.toString()
+					+ ", getDueDate()=" + getDueDate() + ", isCompleted()="
+					+ isCompleted() + ", getCompletedDate()="
+					+ getCompletedDate() + ", isDirty()=" + isDirty()
+					+ ", getGuid()=" + getGuid() + ", getName()=" + getName()
+					+ ", getNote()=" + getNote() + ", getLastModifiedDate()="
+					+ getLastModifiedDate() + ", getCreateDate()="
+					+ getCreateDate() + ", getClass()=" + getClass()
+					+ ", hashCode()=" + hashCode() + "]";
 		}
 
 		public boolean isPhoneInterview() {
