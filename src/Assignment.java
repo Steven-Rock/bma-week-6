@@ -1,7 +1,10 @@
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-// Class #5 Homework
+/**
+ *  Class #6 Homework
+ * @author srockny05
+ */
 public class Assignment {
 
 	/**
@@ -30,19 +33,27 @@ public class Assignment {
 		return values[index];
 
 	}
-
+	
+	/*
+	 * Abstract Note
+	 * Note FlashCardNote ClassNote, Abstract Task
+	 * Task, DueDateTask, CalendarTask, InterviewTask
+	 * Shopping Task, Phone Task, Waiting Task
+	 * MultiTask, FollowUpTask, Chore Task, NestedTask
+	 */
 
 	private class Task{
 
-		String name = null;
-		String note = null;
+		private String name = null;
+		private String note = null;
+		private boolean completed = false;
 
-		Date dueDate = null;
-		Date lastModifiedDate = null;
-		Date createDate = null;
-
-
-
+		private Date dueDate = null;
+		private Date lastModifiedDate = null;
+		private Date createDate = null;
+		private Date completedDate = null;
+		
+		
 		public Task(String name, String note, Date dueDate) {
 			this.name = name;
 			this.note = note;
@@ -58,9 +69,28 @@ public class Assignment {
 
 		@Override
 		public String toString() {
-			return "Task [name=" + name + ", note=" + note + ", dueDate="
-					+ dueDate + ", lastModifiedDate=" + lastModifiedDate
-					+ ", createDate=" + createDate + "]";
+			return "Task [name=" + name + ", note=" + note + ", completed="
+					+ completed + ", dueDate=" + dueDate
+					+ ", lastModifiedDate=" + lastModifiedDate
+					+ ", createDate=" + createDate + ", completedDate="
+					+ completedDate + "]";
+		}
+
+		public boolean isCompleted() {
+			return completed;
+		}
+
+		public void setCompleted(boolean completed) {
+			this.completed = completed;
+			this.completedDate = GregorianCalendar.getInstance().getTime();
+		}
+
+		public Date getCompletedDate() {
+			return completedDate;
+		}
+
+		public void setCompletedDate(Date completedDate) {
+			this.completedDate = completedDate;
 		}
 
 		public String getName() {
