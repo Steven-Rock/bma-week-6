@@ -19,6 +19,7 @@ public class Assignment {
 
 		Assignment a = new Assignment();
 		
+		
 		Note note = a.new Note();
 		Assignment.printTask(note);
 		
@@ -28,7 +29,7 @@ public class Assignment {
 		Task task = a.new Task();
 		Assignment.printTask(task);
 		
-		String date = 2012 + "/" + 11 + "/" + 25;
+		String date = "2012/11/25";
 	    try {
 			task = a.new Task("Test Task", "This is a task", formatter.parse(date));
 			Assignment.printTask(task);
@@ -37,18 +38,19 @@ public class Assignment {
 			e.printStackTrace();
 		}
 		
-		
-	    date = 2012 + "/" + 11 + "/" + 28 + " 07:30";
 		InterviewTask interviewTask = a.new InterviewTask();
 		Assignment.printTask(interviewTask);
-	    try {
-	    	interviewTask = a.new InterviewTask("Test Task", "This is a task", fullFormatter.parse(date),
+	    
+		try {
+			
+	    	interviewTask = a.new InterviewTask("Test Task", "This is a task", 
+	    			fullFormatter.parse("2012/11/28 07:30"),
 	    			true, "914-914-0914",
 					"Frank Silvadore"
 	    			);
 			Assignment.printTask(interviewTask);
 		} catch (ParseException e) {
-			System.out.print("Unable to format the data: " + date);
+			System.out.print("Unable to format the data: " + "2012/11/28 07:30");
 			e.printStackTrace();
 		}
 		
@@ -154,6 +156,10 @@ public class Assignment {
 
 		public Note() {
 			super();
+			setGuid(UUID.randomUUID());
+			setLastModifiedDate(GregorianCalendar.getInstance().getTime());
+			setCreateDate(GregorianCalendar.getInstance().getTime());
+			setDirty(true);			
 		}
 
 		@Override
@@ -231,6 +237,11 @@ public class Assignment {
 
 		public Task() {
 			super();
+			setGuid(UUID.randomUUID());
+			setLastModifiedDate(GregorianCalendar.getInstance().getTime());
+			setCreateDate(GregorianCalendar.getInstance().getTime());
+			setCompleted(false);
+			setDirty(true);
 		}
 
 		@Override
