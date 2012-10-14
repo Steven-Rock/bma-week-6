@@ -14,11 +14,11 @@ public class Assignment {
 
 		Assignment a = new Assignment();
 
-		Task task = null;
-		task = a.new Task();
+		Task1 task = null;
+		task = a.new Task1();
 		System.out.println(task);
 
-		task = a.new Task("Test", "First note ever made, yahoo!", GregorianCalendar.getInstance().getTime());
+		task = a.new Task1("Test", "First note ever made, yahoo!", GregorianCalendar.getInstance().getTime());
 		System.out.println(task);
 
 	}
